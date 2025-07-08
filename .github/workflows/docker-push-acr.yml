@@ -2,7 +2,11 @@ name: Build and Push Docker image to ACR
 
 on:
   push:
+<<<<<<< HEAD
     branches: [ main ]
+=======
+    branches: [ main ]  # or your default branch
+>>>>>>> 9100e96cce84d68f0335d56fafec8cdd90b4a79c
 
 jobs:
   build-and-push:
