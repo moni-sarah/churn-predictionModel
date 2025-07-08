@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  churn-prediction-api:
+    build: .
+    container_name: churn-prediction-api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./models:/app/models
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - churn-network
+
+  # Optional: Add Redis for caching (uncomment if needed)
+  # redis:
+  #   image: redis:alpine
+  #   container_name: churn-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  #   networks:
+  #     - churn-network
+
+  # Optional: Add Nginx as reverse proxy (uncomment if needed)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: churn-nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - churn-prediction-api
+  #   restart: unless-stopped
+  #   networks:
+  #     - churn-network
+
+networks:
+  churn-network:
+    driver: bridge 
