@@ -2,35 +2,31 @@ name: Build and Push Docker image to ACR
 
 on:
   push:
-<<<<<<< HEAD
-    branches: [ main ]
-=======
-    branches: [ main ]  # or your default branch
->>>>>>> 9100e96cce84d68f0335d56fafec8cdd90b4a79c
+    branches: [main]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Log in to Azure
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-    - name: Log in to ACR
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.AZURE_CLIENT_ID }}
-        password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: Log in to ACR
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
-    - name: Build and push Docker image
-      run: |
-        docker build -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/churn-prediction-api:latest .
-        docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/churn-prediction-api:latest
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/churn-prediction-api:latest .
+          docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/churn-prediction-api:latest
